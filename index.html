@@ -300,14 +300,7 @@
 
 <script>
 // ── DATA ──────────────────────────────────────────────
-let products = [
-  { id:1, name:'Ceramic Mug 350ml',    sku:'MUG-350',  category:'Mugs',     qty:120, min:50 },
-  { id:2, name:'Stainless Flask 500ml', sku:'FLK-500',  category:'Flasks',   qty:34,  min:40 },
-  { id:3, name:'Bamboo Tray (Large)',   sku:'TRY-L',    category:'Trays',    qty:18,  min:25 },
-  { id:4, name:'Glass Bottle 1L',       sku:'BTL-1L',   category:'Bottles',  qty:75,  min:30 },
-  { id:5, name:'Wooden Lid Set',        sku:'LID-SET',  category:'Lids',     qty:0,   min:20 },
-  { id:6, name:'Cork Mat (Round)',      sku:'MAT-CRK',  category:'Mats',     qty:55,  min:25 },
-];
+let products = [];
 
 let alerts = [];
 let selectedId = null;
@@ -400,8 +393,8 @@ function renderProducts() {
   if (filter === 'out') list = list.filter(p => status(p) === 'out');
 
   const grid = document.getElementById('product-grid');
-  if (list.length === 0) {
-    grid.innerHTML = '<div class="empty" style="grid-column:1/-1">No products match this filter.</div>';
+  if (list.length === 0 && products.length === 0) {
+    grid.innerHTML = '<div class="empty" style="grid-column:1/-1">No products yet — click <strong>+ Add product</strong> to get started.</div>';
     return;
   }
 
@@ -425,7 +418,10 @@ function renderProducts() {
       </div>
       <div class="product-footer">
         <span style="font-size:11px;color:var(--text3)">${barPct(p)}% of target</span>
-        <button class="btn btn-sm" onclick="event.stopPropagation();quickAlert(${p.id})">Request restock</button>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-sm" onclick="event.stopPropagation();quickAlert(${p.id})">Request restock</button>
+          <button class="btn btn-sm btn-danger" onclick="event.stopPropagation();deleteProduct(${p.id})" title="Remove product">✕</button>
+        </div>
       </div>
     </div>
   `).join('');
@@ -635,6 +631,16 @@ function addProduct() {
   products.push({ id: nextId++, name, sku, category: cat, qty, min });
   closeAddProduct();
   toast(`${name} added to inventory`);
+  render();
+}
+
+function deleteProduct(id) {
+  const p = products.find(x => x.id === id);
+  if (!confirm(`Remove "${p.name}" from inventory?\nThis cannot be undone.`)) return;
+  products = products.filter(x => x.id !== id);
+  alerts = alerts.filter(x => x.sku !== p.sku);
+  if (selectedId === id) selectedId = null;
+  toast(`${p.name} removed`);
   render();
 }
 

@@ -6,182 +6,97 @@
 <title>Warehouse Inventory</title>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
   :root {
-    --bg: #f7f6f3;
-    --surface: #ffffff;
-    --surface2: #f0efe9;
-    --border: rgba(0,0,0,0.09);
-    --border-med: rgba(0,0,0,0.15);
-    --text: #1a1a18;
-    --text2: #6b6b66;
-    --text3: #9e9e99;
+    --bg: #f7f6f3; --surface: #ffffff; --surface2: #f0efe9;
+    --border: rgba(0,0,0,0.09); --border-med: rgba(0,0,0,0.15);
+    --text: #1a1a18; --text2: #6b6b66; --text3: #9e9e99;
     --green: #166534; --green-bg: #dcfce7; --green-border: #bbf7d0;
     --amber: #92400e; --amber-bg: #fef3c7; --amber-border: #fde68a;
     --red: #991b1b; --red-bg: #fee2e2; --red-border: #fecaca;
     --blue: #1e40af; --blue-bg: #dbeafe; --blue-border: #bfdbfe;
-    --accent: #1a1a18;
-    --radius: 10px;
-    --radius-sm: 6px;
+    --radius: 10px; --radius-sm: 6px;
   }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; font-size: 14px; line-height: 1.5; }
 
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    min-height: 100vh;
-    font-size: 14px;
-    line-height: 1.5;
-  }
-
-  /* Header */
-  .header {
-    background: var(--surface);
-    border-bottom: 0.5px solid var(--border);
-    padding: 0 24px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 56px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
+  .header { background: var(--surface); border-bottom: 0.5px solid var(--border); padding: 0 24px; display: flex; align-items: center; justify-content: space-between; height: 56px; position: sticky; top: 0; z-index: 100; }
   .header-brand { font-size: 15px; font-weight: 600; letter-spacing: -0.02em; }
   .header-brand span { color: var(--text3); font-weight: 400; margin-left: 6px; font-size: 13px; }
   .header-right { display: flex; align-items: center; gap: 10px; }
 
-  /* Layout */
   .container { max-width: 1000px; margin: 0 auto; padding: 28px 20px; }
 
-  /* Stats row */
   .stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 24px; }
-  .stat-card {
-    background: var(--surface);
-    border: 0.5px solid var(--border);
-    border-radius: var(--radius);
-    padding: 16px 18px;
-  }
+  .stat-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 16px 18px; }
   .stat-label { font-size: 12px; color: var(--text2); margin-bottom: 6px; }
   .stat-value { font-size: 26px; font-weight: 600; letter-spacing: -0.03em; }
-  .stat-value.green { color: var(--green); }
-  .stat-value.amber { color: var(--amber); }
-  .stat-value.red   { color: var(--red); }
+  .stat-value.green { color: var(--green); } .stat-value.amber { color: var(--amber); } .stat-value.red { color: var(--red); }
   .stat-sub { font-size: 11px; color: var(--text3); margin-top: 3px; }
 
-  /* Section heading */
-  .section-head {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 12px;
-  }
+  .section-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; }
   .section-title { font-size: 13px; font-weight: 600; color: var(--text2); text-transform: uppercase; letter-spacing: 0.06em; }
 
-  /* Product grid */
   .product-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; margin-bottom: 28px; }
-
-  .product-card {
-    background: var(--surface);
-    border: 0.5px solid var(--border);
-    border-radius: var(--radius);
-    padding: 18px;
-    cursor: pointer;
-    transition: box-shadow .15s, border-color .15s;
-    position: relative;
-  }
+  .product-card { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 18px; cursor: pointer; transition: box-shadow .15s, border-color .15s; }
   .product-card:hover { border-color: var(--border-med); box-shadow: 0 2px 12px rgba(0,0,0,0.06); }
-  .product-card.selected { border-color: var(--accent); border-width: 1.5px; }
-
+  .product-card.selected { border-color: #1a1a18; border-width: 1.5px; }
   .product-card-top { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 14px; }
   .product-name { font-size: 14px; font-weight: 600; line-height: 1.3; }
-  .product-sku { font-size: 11px; color: var(--text3); margin-top: 2px; font-family: 'SF Mono', 'Fira Mono', monospace; }
+  .product-sku { font-size: 11px; color: var(--text3); margin-top: 2px; font-family: monospace; }
 
-  /* Stock bar */
   .stock-bar-wrap { margin-bottom: 12px; }
   .stock-bar-labels { display: flex; justify-content: space-between; font-size: 11px; color: var(--text2); margin-bottom: 5px; }
   .stock-bar-track { height: 5px; background: var(--surface2); border-radius: 99px; overflow: hidden; }
   .stock-bar-fill { height: 100%; border-radius: 99px; transition: width .4s; }
-  .fill-green { background: #22c55e; }
-  .fill-amber { background: #f59e0b; }
-  .fill-red   { background: #ef4444; }
+  .fill-green { background: #22c55e; } .fill-amber { background: #f59e0b; } .fill-red { background: #ef4444; }
 
   .product-footer { display: flex; align-items: center; justify-content: space-between; }
 
-  /* Badges */
-  .badge {
-    display: inline-flex; align-items: center; gap: 4px;
-    padding: 3px 8px; border-radius: 99px;
-    font-size: 11px; font-weight: 500; border: 0.5px solid;
-  }
+  .qty-display { font-size: 13px; font-weight: 600; color: var(--text); }
+  .qty-secondary { font-size: 12px; color: var(--text2); font-weight: 400; }
+
+  .badge { display: inline-flex; align-items: center; gap: 4px; padding: 3px 8px; border-radius: 99px; font-size: 11px; font-weight: 500; border: 0.5px solid; }
   .badge-green  { background: var(--green-bg);  color: var(--green);  border-color: var(--green-border); }
   .badge-amber  { background: var(--amber-bg);  color: var(--amber);  border-color: var(--amber-border); }
   .badge-red    { background: var(--red-bg);    color: var(--red);    border-color: var(--red-border); }
   .badge-blue   { background: var(--blue-bg);   color: var(--blue);   border-color: var(--blue-border); }
   .badge-gray   { background: var(--surface2);  color: var(--text2);  border-color: var(--border); }
 
-  /* Buttons */
-  .btn {
-    display: inline-flex; align-items: center; gap: 6px;
-    padding: 7px 14px; border-radius: var(--radius-sm);
-    font-size: 13px; font-weight: 500; cursor: pointer;
-    border: 0.5px solid var(--border-med); background: var(--surface);
-    color: var(--text); transition: all .12s;
-  }
+  .btn { display: inline-flex; align-items: center; gap: 6px; padding: 7px 14px; border-radius: var(--radius-sm); font-size: 13px; font-weight: 500; cursor: pointer; border: 0.5px solid var(--border-med); background: var(--surface); color: var(--text); transition: all .12s; }
   .btn:hover { background: var(--surface2); }
-  .btn-primary { background: var(--accent); color: #fff; border-color: var(--accent); }
-  .btn-primary:hover { opacity: .88; background: var(--accent); }
+  .btn-primary { background: #1a1a18; color: #fff; border-color: #1a1a18; }
+  .btn-primary:hover { opacity: .88; background: #1a1a18; }
   .btn-sm { padding: 5px 10px; font-size: 12px; }
   .btn-danger { background: var(--red-bg); color: var(--red); border-color: var(--red-border); }
-  .btn-danger:hover { background: #fecaca; }
 
-  /* Detail panel */
-  .detail-panel {
-    background: var(--surface);
-    border: 0.5px solid var(--border);
-    border-radius: var(--radius);
-    padding: 22px;
-    margin-bottom: 24px;
-    display: none;
-  }
+  .detail-panel { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 22px; margin-bottom: 24px; display: none; }
   .detail-panel.open { display: block; }
   .detail-header { display: flex; align-items: flex-start; justify-content: space-between; margin-bottom: 20px; }
   .detail-title { font-size: 18px; font-weight: 700; letter-spacing: -0.02em; }
   .detail-meta { font-size: 12px; color: var(--text3); margin-top: 3px; }
-
   .detail-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-bottom: 20px; }
   .detail-stat { background: var(--surface2); border-radius: var(--radius-sm); padding: 12px 14px; }
   .detail-stat-label { font-size: 11px; color: var(--text2); margin-bottom: 4px; }
   .detail-stat-val { font-size: 20px; font-weight: 700; }
+  .detail-stat-val2 { font-size: 13px; color: var(--text2); margin-top: 2px; }
 
-  /* Alert raise form */
   .alert-form { background: var(--surface2); border-radius: var(--radius-sm); padding: 16px; border: 0.5px solid var(--border); }
   .alert-form-title { font-size: 13px; font-weight: 600; margin-bottom: 12px; }
   .form-row { display: flex; gap: 10px; flex-wrap: wrap; margin-bottom: 10px; }
-  .form-group { flex: 1; min-width: 120px; }
+  .form-group { flex: 1; min-width: 100px; }
   .form-label { font-size: 11px; font-weight: 500; color: var(--text2); margin-bottom: 4px; display: block; text-transform: uppercase; letter-spacing: .04em; }
-  input[type=number], input[type=text], select, textarea {
-    width: 100%; padding: 8px 10px;
-    border: 0.5px solid var(--border-med); border-radius: var(--radius-sm);
-    font-size: 13px; font-family: inherit;
-    background: var(--surface); color: var(--text);
-  }
-  input:focus, select:focus, textarea:focus { outline: none; border-color: var(--accent); }
+  input[type=number], input[type=text], select, textarea { width: 100%; padding: 8px 10px; border: 0.5px solid var(--border-med); border-radius: var(--radius-sm); font-size: 13px; font-family: inherit; background: var(--surface); color: var(--text); }
+  input:focus, select:focus, textarea:focus { outline: none; border-color: #1a1a18; }
   textarea { min-height: 56px; resize: vertical; }
 
-  /* Alerts section */
+  .unit-hint { font-size: 11px; color: var(--text3); margin-top: 4px; }
+
   .alerts-section { margin-bottom: 28px; }
-  .alert-item {
-    background: var(--surface); border: 0.5px solid var(--border);
-    border-radius: var(--radius); padding: 14px 16px;
-    display: flex; align-items: flex-start; gap: 12px;
-    margin-bottom: 8px; transition: border-color .15s;
-  }
+  .alert-item { background: var(--surface); border: 0.5px solid var(--border); border-radius: var(--radius); padding: 14px 16px; display: flex; align-items: flex-start; gap: 12px; margin-bottom: 8px; }
   .alert-item.urgent { border-left: 3px solid #ef4444; }
   .alert-item.high   { border-left: 3px solid #f59e0b; }
   .alert-item.normal { border-left: 3px solid #3b82f6; }
   .alert-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; margin-top: 5px; }
-  .dot-red   { background: #ef4444; }
-  .dot-amber { background: #f59e0b; }
-  .dot-blue  { background: #3b82f6; }
+  .dot-red { background: #ef4444; } .dot-amber { background: #f59e0b; } .dot-blue { background: #3b82f6; }
   .alert-body { flex: 1; }
   .alert-title { font-size: 13px; font-weight: 600; }
   .alert-desc  { font-size: 12px; color: var(--text2); margin-top: 2px; }
@@ -189,26 +104,25 @@
   .alert-actions { display: flex; gap: 6px; margin-top: 8px; }
   .empty { text-align: center; padding: 28px; color: var(--text3); font-size: 13px; }
 
-  /* Toast */
-  .toast {
-    position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%);
-    background: #1a1a18; color: #fff; padding: 10px 20px;
-    border-radius: 20px; font-size: 13px; pointer-events: none;
-    opacity: 0; transition: opacity .25s; z-index: 999; white-space: nowrap;
-  }
+  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
+  .chip { padding: 5px 12px; border-radius: 99px; font-size: 12px; font-weight: 500; border: 0.5px solid var(--border-med); background: var(--surface); cursor: pointer; color: var(--text2); transition: all .12s; }
+  .chip.active { background: #1a1a18; color: #fff; border-color: #1a1a18; }
+
+  hr { border: none; border-top: 0.5px solid var(--border); margin: 20px 0; }
+
+  .toast { position: fixed; bottom: 24px; left: 50%; transform: translateX(-50%); background: #1a1a18; color: #fff; padding: 10px 20px; border-radius: 20px; font-size: 13px; pointer-events: none; opacity: 0; transition: opacity .25s; z-index: 999; white-space: nowrap; }
   .toast.show { opacity: 1; }
 
-  /* Chip filters */
-  .chips { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 14px; }
-  .chip {
-    padding: 5px 12px; border-radius: 99px; font-size: 12px; font-weight: 500;
-    border: 0.5px solid var(--border-med); background: var(--surface);
-    cursor: pointer; color: var(--text2); transition: all .12s;
-  }
-  .chip.active { background: var(--accent); color: #fff; border-color: var(--accent); }
+  .loader { display: inline-block; width: 14px; height: 14px; border: 2px solid var(--border); border-top-color: var(--text); border-radius: 50%; animation: spin .6s linear infinite; vertical-align: middle; margin-right: 6px; }
+  @keyframes spin { to { transform: rotate(360deg); } }
 
-  /* Divider */
-  hr { border: none; border-top: 0.5px solid var(--border); margin: 20px 0; }
+  .sync-dot { width: 7px; height: 7px; border-radius: 50%; background: #22c55e; display: inline-block; margin-right: 5px; }
+  .sync-dot.offline { background: #ef4444; }
+
+  #add-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 200; align-items: center; justify-content: center; }
+  #add-modal.open { display: flex; }
+  #update-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.35); z-index: 200; align-items: center; justify-content: center; }
+  #update-modal.open { display: flex; }
 
   @media (max-width: 600px) {
     .stats { grid-template-columns: 1fr 1fr; }
@@ -220,19 +134,21 @@
 <body>
 
 <div class="header">
-  <div class="header-brand">Warehouse <span>Inventory System</span></div>
+  <div class="header-brand">Warehouse <span>Inventory</span></div>
   <div class="header-right">
+    <span id="sync-status" style="font-size:12px;color:var(--text2)"><span class="sync-dot" id="sync-dot"></span><span id="sync-text">Connecting...</span></span>
     <span id="header-alert-count" class="badge badge-red" style="display:none"></span>
     <button class="btn btn-sm" onclick="scrollToAlerts()">View alerts</button>
   </div>
 </div>
 
 <div class="container">
+  <div class="stats">
+    <div class="stat-card"><div class="stat-label">Total products</div><div class="stat-value green" id="s-total"><span class="loader"></span></div><div class="stat-sub" id="s-total-sub"></div></div>
+    <div class="stat-card"><div class="stat-label">Low stock</div><div class="stat-value amber" id="s-low"><span class="loader"></span></div><div class="stat-sub">Below minimum threshold</div></div>
+    <div class="stat-card"><div class="stat-label">Out of stock</div><div class="stat-value red" id="s-out"><span class="loader"></span></div><div class="stat-sub">Zero units remaining</div></div>
+  </div>
 
-  <!-- Stats -->
-  <div class="stats" id="stats-row"></div>
-
-  <!-- Product list -->
   <div class="section-head">
     <span class="section-title">Products</span>
     <button class="btn btn-sm btn-primary" onclick="openAddProduct()">+ Add product</button>
@@ -245,152 +161,190 @@
     <div class="chip" onclick="setFilter('out',this)">Out of stock</div>
   </div>
 
-  <div class="product-grid" id="product-grid"></div>
+  <div class="product-grid" id="product-grid"><div class="empty" style="grid-column:1/-1"><span class="loader"></span> Loading products...</div></div>
 
-  <!-- Detail panel -->
   <div class="detail-panel" id="detail-panel"></div>
 
-  <!-- Alerts section -->
   <div class="alerts-section" id="alerts-section">
     <div class="section-head">
       <span class="section-title">Active alerts</span>
       <button class="btn btn-sm btn-danger" onclick="clearAllAlerts()" id="clear-alerts-btn" style="display:none">Clear all</button>
     </div>
-    <div id="alerts-list"></div>
+    <div id="alerts-list"><div class="empty"><span class="loader"></span> Loading alerts...</div></div>
   </div>
-
 </div>
 
-<!-- Add product modal overlay -->
-<div id="add-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.35);z-index:200;display:none;align-items:center;justify-content:center;">
-  <div style="background:var(--surface);border-radius:var(--radius);padding:24px;width:360px;max-width:90vw;box-shadow:0 8px 40px rgba(0,0,0,0.15);">
+<!-- Add Product Modal -->
+<div id="add-modal">
+  <div style="background:var(--surface);border-radius:var(--radius);padding:24px;width:400px;max-width:94vw;max-height:90vh;overflow-y:auto;">
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:18px;">
       <span style="font-weight:600;font-size:15px">Add product</span>
       <button class="btn btn-sm" onclick="closeAddProduct()">Cancel</button>
     </div>
+
     <div class="form-group" style="margin-bottom:10px">
       <label class="form-label">Product name</label>
-      <input type="text" id="ap-name" placeholder="e.g. Ceramic Mug 350ml"/>
+      <input type="text" id="ap-name" placeholder="e.g. A4 Paper Ream"/>
     </div>
     <div style="display:flex;gap:10px;margin-bottom:10px">
       <div class="form-group">
         <label class="form-label">SKU</label>
-        <input type="text" id="ap-sku" placeholder="e.g. MUG-350"/>
+        <input type="text" id="ap-sku" placeholder="e.g. PPR-A4"/>
       </div>
       <div class="form-group">
         <label class="form-label">Category</label>
-        <input type="text" id="ap-cat" placeholder="e.g. Mugs"/>
+        <input type="text" id="ap-cat" placeholder="e.g. Paper"/>
+      </div>
+    </div>
+
+    <div style="background:var(--surface2);border-radius:var(--radius-sm);padding:12px;margin-bottom:10px;border:0.5px solid var(--border)">
+      <div style="font-size:12px;font-weight:600;margin-bottom:8px;color:var(--text2)">UNIT SETUP</div>
+      <div style="display:flex;gap:10px;margin-bottom:8px">
+        <div class="form-group">
+          <label class="form-label">Primary unit</label>
+          <input type="text" id="ap-unit1" placeholder="e.g. bundles, boxes"/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Secondary unit (optional)</label>
+          <input type="text" id="ap-unit2" placeholder="e.g. packets, sheets"/>
+        </div>
+      </div>
+      <div class="unit-hint">e.g. Primary = "bundles", Secondary = "packets" → shows as "19 bundles + 2 packets"</div>
+    </div>
+
+    <div style="display:flex;gap:10px;margin-bottom:10px">
+      <div class="form-group">
+        <label class="form-label">Current qty (primary)</label>
+        <input type="number" id="ap-qty" value="0" min="0"/>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Current qty (secondary)</label>
+        <input type="number" id="ap-qty2" value="0" min="0"/>
       </div>
     </div>
     <div style="display:flex;gap:10px;margin-bottom:18px">
       <div class="form-group">
-        <label class="form-label">Current qty</label>
-        <input type="number" id="ap-qty" value="0" min="0"/>
-      </div>
-      <div class="form-group">
-        <label class="form-label">Min threshold</label>
-        <input type="number" id="ap-min" value="20" min="1"/>
+        <label class="form-label">Min threshold (primary units)</label>
+        <input type="number" id="ap-min" value="10" min="1"/>
       </div>
     </div>
     <button class="btn btn-primary" style="width:100%" onclick="addProduct()">Add product</button>
   </div>
 </div>
 
+<!-- Update Qty Modal -->
+<div id="update-modal">
+  <div style="background:var(--surface);border-radius:var(--radius);padding:24px;width:360px;max-width:94vw;">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+      <span style="font-weight:600;font-size:15px">Update quantity</span>
+      <button class="btn btn-sm" onclick="closeUpdateModal()">Cancel</button>
+    </div>
+    <div style="font-size:13px;color:var(--text2);margin-bottom:16px" id="upd-product-name"></div>
+    <div style="display:flex;gap:10px;margin-bottom:18px">
+      <div class="form-group">
+        <label class="form-label" id="upd-unit1-label">Primary qty</label>
+        <input type="number" id="upd-qty" value="0" min="0"/>
+      </div>
+      <div class="form-group" id="upd-secondary-group">
+        <label class="form-label" id="upd-unit2-label">Secondary qty</label>
+        <input type="number" id="upd-qty2" value="0" min="0"/>
+      </div>
+    </div>
+    <button class="btn btn-primary" style="width:100%" onclick="saveUpdatedQty()">Save quantity</button>
+  </div>
+</div>
+
 <div class="toast" id="toast"></div>
 
-<script>
-// ── DATA ──────────────────────────────────────────────
-let products = [
-  { id:1, name:'Ceramic Mug 350ml',    sku:'MUG-350',  category:'Mugs',     qty:120, min:50 },
-  { id:2, name:'Stainless Flask 500ml', sku:'FLK-500',  category:'Flasks',   qty:34,  min:40 },
-  { id:3, name:'Bamboo Tray (Large)',   sku:'TRY-L',    category:'Trays',    qty:18,  min:25 },
-  { id:4, name:'Glass Bottle 1L',       sku:'BTL-1L',   category:'Bottles',  qty:75,  min:30 },
-  { id:5, name:'Wooden Lid Set',        sku:'LID-SET',  category:'Lids',     qty:0,   min:20 },
-  { id:6, name:'Cork Mat (Round)',      sku:'MAT-CRK',  category:'Mats',     qty:55,  min:25 },
-];
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.0/firebase-firestore-compat.js"></script>
 
-let alerts = [];
-let selectedId = null;
-let filter = 'all';
-let nextId = 10;
+<script>
+const firebaseConfig = {
+  apiKey: "AIzaSyBm-53uvBH9wy9S5EfitHW7fGDkBQwakKs",
+  authDomain: "inventorymangament-c5d7d.firebaseapp.com",
+  projectId: "inventorymangament-c5d7d",
+  storageBucket: "inventorymangament-c5d7d.firebasestorage.app",
+  messagingSenderId: "423158671483",
+  appId: "1:423158671483:web:5eb069302189b7be801ade"
+};
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+
+let products = [], alerts = [], selectedId = null, filter = 'all';
+let updateTargetId = null;
 
 // ── HELPERS ───────────────────────────────────────────
 function status(p) {
-  if (p.qty <= 0)       return 'out';
-  if (p.qty < p.min)    return 'low';
+  if (p.qty <= 0 && !(p.qty2 > 0)) return 'out';
+  if (p.qty < p.min) return 'low';
   return 'ok';
 }
-
 function statusBadge(p) {
   const s = status(p);
   if (s === 'out') return '<span class="badge badge-red">Out of stock</span>';
   if (s === 'low') return '<span class="badge badge-amber">Low stock</span>';
   return '<span class="badge badge-green">In stock</span>';
 }
-
 function barClass(p) {
   const s = status(p);
   if (s === 'out') return 'fill-red';
   if (s === 'low') return 'fill-amber';
   return 'fill-green';
 }
+function barPct(p) { return Math.min(100, Math.round((p.qty / (p.min * 2)) * 100)); }
 
-function barPct(p) {
-  if (p.min === 0) return 100;
-  return Math.min(100, Math.round((p.qty / (p.min * 2)) * 100));
+function qtyLabel(p) {
+  const u1 = p.unit1 || 'units';
+  const primaryPart = p.qty + ' ' + u1;
+  if (p.unit2 && (p.qty2 || 0) > 0) {
+    return primaryPart + ' + ' + p.qty2 + ' ' + p.unit2;
+  }
+  return primaryPart;
+}
+
+function qtyLabelShort(p) {
+  const u1 = p.unit1 || 'units';
+  if (p.unit2 && (p.qty2 || 0) > 0) {
+    return '<span class="qty-display">' + p.qty + ' ' + u1 + '</span> <span class="qty-secondary">+ ' + p.qty2 + ' ' + p.unit2 + '</span>';
+  }
+  return '<span class="qty-display">' + p.qty + ' ' + u1 + '</span>';
 }
 
 function timeNow() {
-  return new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+  return new Date().toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'}) + ', ' + new Date().toLocaleDateString([], {day:'numeric', month:'short'});
 }
-
 function toast(msg) {
   const el = document.getElementById('toast');
   el.textContent = msg;
   el.classList.add('show');
   setTimeout(() => el.classList.remove('show'), 2400);
 }
-
-// ── RENDER ────────────────────────────────────────────
-function render() {
-  renderStats();
-  renderProducts();
-  renderDetail();
-  renderAlerts();
+function setSyncStatus(online) {
+  document.getElementById('sync-dot').className = 'sync-dot' + (online ? '' : ' offline');
+  document.getElementById('sync-text').textContent = online ? 'Live' : 'Offline';
 }
 
+// ── LISTENERS ─────────────────────────────────────────
+db.collection('products').orderBy('name').onSnapshot(snap => {
+  products = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  setSyncStatus(true);
+  renderStats(); renderProducts(); renderDetail();
+}, err => { setSyncStatus(false); console.error(err); });
+
+db.collection('alerts').orderBy('createdAt', 'desc').onSnapshot(snap => {
+  alerts = snap.docs.map(d => ({ id: d.id, ...d.data() }));
+  renderAlerts(); updateAlertBadge();
+}, err => console.error(err));
+
+// ── RENDER ────────────────────────────────────────────
 function renderStats() {
-  const total = products.reduce((a,p) => a + p.qty, 0);
   const lowCount = products.filter(p => status(p) === 'low').length;
   const outCount = products.filter(p => status(p) === 'out').length;
-
-  document.getElementById('stats-row').innerHTML = `
-    <div class="stat-card">
-      <div class="stat-label">Total units in warehouse</div>
-      <div class="stat-value green">${total.toLocaleString()}</div>
-      <div class="stat-sub">${products.length} products tracked</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Low stock products</div>
-      <div class="stat-value ${lowCount > 0 ? 'amber' : 'green'}">${lowCount}</div>
-      <div class="stat-sub">Below minimum threshold</div>
-    </div>
-    <div class="stat-card">
-      <div class="stat-label">Out of stock</div>
-      <div class="stat-value ${outCount > 0 ? 'red' : 'green'}">${outCount}</div>
-      <div class="stat-sub">Zero units remaining</div>
-    </div>
-  `;
-
-  // Header alert badge
-  const activeAlerts = alerts.length;
-  const badge = document.getElementById('header-alert-count');
-  if (activeAlerts > 0) {
-    badge.style.display = '';
-    badge.textContent = activeAlerts + ' alert' + (activeAlerts > 1 ? 's' : '');
-  } else {
-    badge.style.display = 'none';
-  }
+  document.getElementById('s-total').textContent = products.length;
+  document.getElementById('s-total-sub').textContent = products.length === 1 ? '1 product tracked' : products.length + ' products tracked';
+  document.getElementById('s-low').textContent = lowCount;
+  document.getElementById('s-out').textContent = outCount;
 }
 
 function renderProducts() {
@@ -401,12 +355,11 @@ function renderProducts() {
 
   const grid = document.getElementById('product-grid');
   if (list.length === 0) {
-    grid.innerHTML = '<div class="empty" style="grid-column:1/-1">No products match this filter.</div>';
+    grid.innerHTML = '<div class="empty" style="grid-column:1/-1">' + (products.length === 0 ? 'No products yet — click <strong>+ Add product</strong> to get started.' : 'No products match this filter.') + '</div>';
     return;
   }
-
   grid.innerHTML = list.map(p => `
-    <div class="product-card ${selectedId === p.id ? 'selected' : ''}" onclick="selectProduct(${p.id})">
+    <div class="product-card ${selectedId === p.id ? 'selected' : ''}" onclick="selectProduct('${p.id}')">
       <div class="product-card-top">
         <div>
           <div class="product-name">${p.name}</div>
@@ -416,16 +369,17 @@ function renderProducts() {
       </div>
       <div class="stock-bar-wrap">
         <div class="stock-bar-labels">
-          <span>${p.qty} units</span>
-          <span>Min: ${p.min}</span>
+          <span>${qtyLabelShort(p)}</span>
+          <span style="color:var(--text3)">Min: ${p.min} ${p.unit1||'units'}</span>
         </div>
-        <div class="stock-bar-track">
-          <div class="stock-bar-fill ${barClass(p)}" style="width:${barPct(p)}%"></div>
-        </div>
+        <div class="stock-bar-track"><div class="stock-bar-fill ${barClass(p)}" style="width:${barPct(p)}%"></div></div>
       </div>
       <div class="product-footer">
         <span style="font-size:11px;color:var(--text3)">${barPct(p)}% of target</span>
-        <button class="btn btn-sm" onclick="event.stopPropagation();quickAlert(${p.id})">Request restock</button>
+        <div style="display:flex;gap:6px">
+          <button class="btn btn-sm" onclick="event.stopPropagation();quickAlert('${p.id}')">Request restock</button>
+          <button class="btn btn-sm btn-danger" onclick="event.stopPropagation();deleteProduct('${p.id}','${p.name}')" title="Remove">✕</button>
+        </div>
       </div>
     </div>
   `).join('');
@@ -436,10 +390,10 @@ function renderDetail() {
   if (!selectedId) { panel.classList.remove('open'); return; }
   const p = products.find(x => x.id === selectedId);
   if (!p) { panel.classList.remove('open'); return; }
-
   const needed = Math.max(0, p.min * 2 - p.qty);
   const s = status(p);
-
+  const u1 = p.unit1 || 'units';
+  const hasSecondary = !!p.unit2;
   panel.classList.add('open');
   panel.innerHTML = `
     <div class="detail-header">
@@ -449,31 +403,30 @@ function renderDetail() {
       </div>
       <button class="btn btn-sm" onclick="closeDetail()">✕ Close</button>
     </div>
-
     <div class="detail-grid">
       <div class="detail-stat">
-        <div class="detail-stat-label">Warehouse qty</div>
-        <div class="detail-stat-val" style="color:${s==='out'?'var(--red)':s==='low'?'var(--amber)':'var(--green)'}">${p.qty}</div>
+        <div class="detail-stat-label">Warehouse stock</div>
+        <div class="detail-stat-val" style="color:${s==='out'?'var(--red)':s==='low'?'var(--amber)':'var(--green)'}">${p.qty} <span style="font-size:14px;font-weight:400">${u1}</span></div>
+        ${hasSecondary && (p.qty2||0) > 0 ? '<div class="detail-stat-val2">+ ' + p.qty2 + ' ' + p.unit2 + '</div>' : ''}
       </div>
       <div class="detail-stat">
         <div class="detail-stat-label">Minimum threshold</div>
-        <div class="detail-stat-val">${p.min}</div>
+        <div class="detail-stat-val">${p.min} <span style="font-size:14px;font-weight:400">${u1}</span></div>
       </div>
       <div class="detail-stat">
-        <div class="detail-stat-label">Suggested restock qty</div>
-        <div class="detail-stat-val" style="color:var(--blue)">${needed}</div>
+        <div class="detail-stat-label">Suggested restock</div>
+        <div class="detail-stat-val" style="color:var(--blue)">${needed} <span style="font-size:14px;font-weight:400">${u1}</span></div>
       </div>
     </div>
-
     <hr/>
-
     <div class="alert-form">
       <div class="alert-form-title">Raise a restock request</div>
       <div class="form-row">
         <div class="form-group">
-          <label class="form-label">Quantity needed</label>
-          <input type="number" id="req-qty" value="${needed}" min="1"/>
+          <label class="form-label">${u1} needed</label>
+          <input type="number" id="req-qty" value="${needed}" min="0"/>
         </div>
+        ${hasSecondary ? `<div class="form-group"><label class="form-label">${p.unit2} needed</label><input type="number" id="req-qty2" value="0" min="0"/></div>` : ''}
         <div class="form-group">
           <label class="form-label">Priority</label>
           <select id="req-priority">
@@ -485,13 +438,13 @@ function renderDetail() {
       </div>
       <div class="form-row">
         <div class="form-group">
-          <label class="form-label">Additional notes (optional)</label>
+          <label class="form-label">Notes (optional)</label>
           <textarea id="req-notes" placeholder="e.g. needed for bulk order next week..."></textarea>
         </div>
       </div>
-      <div style="display:flex;gap:8px;align-items:center;margin-top:4px">
-        <button class="btn btn-primary" onclick="raiseAlert(${p.id})">Raise alert</button>
-        <button class="btn btn-sm" onclick="updateQty(${p.id})">Update warehouse qty</button>
+      <div style="display:flex;gap:8px;margin-top:4px">
+        <button class="btn btn-primary" onclick="raiseAlert('${p.id}')">Raise alert</button>
+        <button class="btn btn-sm" onclick="openUpdateModal('${p.id}')">Update qty</button>
       </div>
     </div>
   `;
@@ -500,28 +453,33 @@ function renderDetail() {
 function renderAlerts() {
   const list = document.getElementById('alerts-list');
   const clearBtn = document.getElementById('clear-alerts-btn');
-
   if (alerts.length === 0) {
     list.innerHTML = '<div class="empty">No active alerts — warehouse is good to go ✓</div>';
     clearBtn.style.display = 'none';
     return;
   }
-
   clearBtn.style.display = '';
   list.innerHTML = alerts.map(a => `
     <div class="alert-item ${a.priority}">
       <div class="alert-dot ${a.priority==='urgent'?'dot-red':a.priority==='high'?'dot-amber':'dot-blue'}"></div>
       <div class="alert-body">
-        <div class="alert-title">${a.product} — ${a.qty} units requested</div>
+        <div class="alert-title">${a.product} — ${a.qtyLabel || a.qty + ' units'} requested</div>
         <div class="alert-desc">${a.notes || 'No additional notes.'}</div>
-        <div class="alert-meta">${a.priority.toUpperCase()} · Raised at ${a.time} by warehouse</div>
+        <div class="alert-meta">${a.priority.toUpperCase()} · Raised at ${a.time}</div>
         <div class="alert-actions">
-          <button class="btn btn-sm btn-primary" onclick="fulfillAlert(${a.id})">Mark fulfilled ✓</button>
-          <button class="btn btn-sm" onclick="dismissAlert(${a.id})">Dismiss</button>
+          <button class="btn btn-sm btn-primary" onclick="fulfillAlert('${a.id}','${a.productId}',${a.qty},${a.qty2||0},'${a.product}')">Mark fulfilled ✓</button>
+          <button class="btn btn-sm" onclick="dismissAlert('${a.id}')">Dismiss</button>
         </div>
       </div>
     </div>
   `).join('');
+}
+
+function updateAlertBadge() {
+  const n = alerts.length;
+  const badge = document.getElementById('header-alert-count');
+  if (n > 0) { badge.style.display = ''; badge.textContent = n + ' alert' + (n > 1 ? 's' : ''); }
+  else badge.style.display = 'none';
 }
 
 // ── ACTIONS ───────────────────────────────────────────
@@ -529,126 +487,146 @@ function setFilter(f, el) {
   filter = f;
   document.querySelectorAll('.chip').forEach(c => c.classList.remove('active'));
   el.classList.add('active');
-  render();
+  renderProducts();
 }
 
 function selectProduct(id) {
   selectedId = selectedId === id ? null : id;
-  // Scroll to detail panel
-  if (selectedId) {
-    setTimeout(() => {
-      document.getElementById('detail-panel').scrollIntoView({ behavior:'smooth', block:'nearest' });
-    }, 50);
-  }
-  render();
+  renderProducts(); renderDetail();
+  if (selectedId) setTimeout(() => document.getElementById('detail-panel').scrollIntoView({ behavior:'smooth', block:'nearest' }), 50);
 }
 
-function closeDetail() {
-  selectedId = null;
-  render();
-}
+function closeDetail() { selectedId = null; renderProducts(); renderDetail(); }
 
 function quickAlert(id) {
   selectedId = id;
-  render();
-  setTimeout(() => {
-    document.getElementById('detail-panel').scrollIntoView({ behavior:'smooth', block:'start' });
-  }, 60);
+  renderProducts(); renderDetail();
+  setTimeout(() => document.getElementById('detail-panel').scrollIntoView({ behavior:'smooth', block:'start' }), 60);
 }
 
-function raiseAlert(pid) {
+async function raiseAlert(pid) {
   const p = products.find(x => x.id === pid);
-  const qty = parseInt(document.getElementById('req-qty').value);
+  const qty  = parseInt(document.getElementById('req-qty').value) || 0;
+  const qty2El = document.getElementById('req-qty2');
+  const qty2 = qty2El ? (parseInt(qty2El.value) || 0) : 0;
   const priority = document.getElementById('req-priority').value;
   const notes = document.getElementById('req-notes').value.trim();
+  if (qty < 1 && qty2 < 1) { toast('Please enter a quantity'); return; }
 
-  if (!qty || qty < 1) { toast('Please enter a valid quantity'); return; }
+  const u1 = p.unit1 || 'units';
+  let qtyLabel = qty + ' ' + u1;
+  if (p.unit2 && qty2 > 0) qtyLabel += ' + ' + qty2 + ' ' + p.unit2;
 
-  alerts.unshift({
-    id: Date.now(),
-    product: p.name,
-    sku: p.sku,
-    qty,
-    priority,
-    notes,
-    time: timeNow(),
-  });
-
-  toast(`Alert raised — ${qty} units of ${p.name} requested`);
-  render();
-  setTimeout(() => scrollToAlerts(), 200);
+  try {
+    await db.collection('alerts').add({
+      product: p.name, productId: pid, sku: p.sku,
+      qty, qty2, qtyLabel, priority, notes,
+      time: timeNow(), createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    toast('Alert raised — ' + qtyLabel + ' of ' + p.name + ' requested');
+    setTimeout(() => scrollToAlerts(), 300);
+  } catch(e) { toast('Error: ' + e.message); }
 }
 
-function fulfillAlert(id) {
-  const a = alerts.find(x => x.id === id);
-  if (!a) return;
-  const p = products.find(x => x.sku === a.sku);
-  if (p) {
-    p.qty += a.qty;
-    toast(`${a.qty} units added to ${p.name}`);
-  }
-  alerts = alerts.filter(x => x.id !== id);
-  render();
+async function fulfillAlert(id, productId, qty, qty2, productName) {
+  try {
+    const p = products.find(x => x.id === productId);
+    if (p) {
+      const update = { qty: (p.qty || 0) + qty };
+      if (qty2 > 0) update.qty2 = (p.qty2 || 0) + qty2;
+      await db.collection('products').doc(productId).update(update);
+    }
+    await db.collection('alerts').doc(id).delete();
+    toast('Stock updated for ' + productName);
+  } catch(e) { toast('Error: ' + e.message); }
 }
 
-function dismissAlert(id) {
-  alerts = alerts.filter(x => x.id !== id);
-  toast('Alert dismissed');
-  render();
+async function dismissAlert(id) {
+  try { await db.collection('alerts').doc(id).delete(); toast('Alert dismissed'); }
+  catch(e) { toast('Error: ' + e.message); }
 }
 
-function clearAllAlerts() {
-  alerts = [];
-  toast('All alerts cleared');
-  render();
+async function clearAllAlerts() {
+  if (!confirm('Clear all active alerts?')) return;
+  try {
+    const batch = db.batch();
+    alerts.forEach(a => batch.delete(db.collection('alerts').doc(a.id)));
+    await batch.commit(); toast('All alerts cleared');
+  } catch(e) { toast('Error: ' + e.message); }
 }
 
-function updateQty(pid) {
+function openUpdateModal(pid) {
   const p = products.find(x => x.id === pid);
-  const newQty = prompt(`Update warehouse quantity for "${p.name}"\nCurrent: ${p.qty} units\n\nEnter new quantity:`);
-  if (newQty === null) return;
-  const n = parseInt(newQty);
-  if (isNaN(n) || n < 0) { toast('Invalid quantity'); return; }
-  p.qty = n;
-  toast(`${p.name} updated to ${n} units`);
-  render();
+  updateTargetId = pid;
+  document.getElementById('upd-product-name').textContent = p.name;
+  const u1 = p.unit1 || 'units';
+  document.getElementById('upd-unit1-label').textContent = u1.charAt(0).toUpperCase() + u1.slice(1) + ' qty';
+  document.getElementById('upd-qty').value = p.qty || 0;
+  const secGroup = document.getElementById('upd-secondary-group');
+  if (p.unit2) {
+    secGroup.style.display = '';
+    document.getElementById('upd-unit2-label').textContent = p.unit2.charAt(0).toUpperCase() + p.unit2.slice(1) + ' qty';
+    document.getElementById('upd-qty2').value = p.qty2 || 0;
+  } else {
+    secGroup.style.display = 'none';
+  }
+  document.getElementById('update-modal').classList.add('open');
 }
 
-function openAddProduct() {
-  document.getElementById('add-modal').style.display = 'flex';
-  document.getElementById('ap-name').focus();
+function closeUpdateModal() { document.getElementById('update-modal').classList.remove('open'); updateTargetId = null; }
+
+async function saveUpdatedQty() {
+  const p = products.find(x => x.id === updateTargetId);
+  const qty  = parseInt(document.getElementById('upd-qty').value) || 0;
+  const qty2 = parseInt(document.getElementById('upd-qty2').value) || 0;
+  try {
+    await db.collection('products').doc(updateTargetId).update({ qty, qty2 });
+    toast(p.name + ' quantity updated');
+    closeUpdateModal();
+    renderDetail();
+  } catch(e) { toast('Error: ' + e.message); }
 }
 
-function closeAddProduct() {
-  document.getElementById('add-modal').style.display = 'none';
+async function deleteProduct(id, name) {
+  if (!confirm('Remove "' + name + '" from inventory?\nThis cannot be undone.')) return;
+  try {
+    await db.collection('products').doc(id).delete();
+    if (selectedId === id) { selectedId = null; renderDetail(); }
+    toast(name + ' removed');
+  } catch(e) { toast('Error: ' + e.message); }
 }
 
-function addProduct() {
-  const name = document.getElementById('ap-name').value.trim();
-  const sku  = document.getElementById('ap-sku').value.trim();
-  const cat  = document.getElementById('ap-cat').value.trim() || 'General';
-  const qty  = parseInt(document.getElementById('ap-qty').value) || 0;
-  const min  = parseInt(document.getElementById('ap-min').value) || 20;
+function openAddProduct() { document.getElementById('add-modal').classList.add('open'); document.getElementById('ap-name').focus(); }
+function closeAddProduct() { document.getElementById('add-modal').classList.remove('open'); }
 
+async function addProduct() {
+  const name  = document.getElementById('ap-name').value.trim();
+  const sku   = document.getElementById('ap-sku').value.trim();
+  const cat   = document.getElementById('ap-cat').value.trim() || 'General';
+  const unit1 = document.getElementById('ap-unit1').value.trim() || 'units';
+  const unit2 = document.getElementById('ap-unit2').value.trim();
+  const qty   = parseInt(document.getElementById('ap-qty').value) || 0;
+  const qty2  = parseInt(document.getElementById('ap-qty2').value) || 0;
+  const min   = parseInt(document.getElementById('ap-min').value) || 10;
   if (!name || !sku) { toast('Please fill in name and SKU'); return; }
-
-  products.push({ id: nextId++, name, sku, category: cat, qty, min });
-  closeAddProduct();
-  toast(`${name} added to inventory`);
-  render();
+  try {
+    await db.collection('products').add({
+      name, sku, category: cat, unit1, unit2, qty, qty2, min,
+      createdAt: firebase.firestore.FieldValue.serverTimestamp()
+    });
+    closeAddProduct();
+    ['ap-name','ap-sku','ap-cat','ap-unit1','ap-unit2'].forEach(id => document.getElementById(id).value = '');
+    document.getElementById('ap-qty').value = '0';
+    document.getElementById('ap-qty2').value = '0';
+    document.getElementById('ap-min').value = '10';
+    toast(name + ' added to inventory');
+  } catch(e) { toast('Error: ' + e.message); }
 }
 
-function scrollToAlerts() {
-  document.getElementById('alerts-section').scrollIntoView({ behavior:'smooth' });
-}
+function scrollToAlerts() { document.getElementById('alerts-section').scrollIntoView({ behavior:'smooth' }); }
 
-// Close modal on outside click
-document.getElementById('add-modal').addEventListener('click', function(e) {
-  if (e.target === this) closeAddProduct();
-});
-
-// Init
-render();
+document.getElementById('add-modal').addEventListener('click', function(e) { if (e.target === this) closeAddProduct(); });
+document.getElementById('update-modal').addEventListener('click', function(e) { if (e.target === this) closeUpdateModal(); });
 </script>
 </body>
 </html>
